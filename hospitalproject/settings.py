@@ -70,9 +70,9 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.SessionAuthentication',],
-    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated',],}
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': ['rest_framework.authentication.SessionAuthentication',],
+#     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated',],}
 
 
 ROOT_URLCONF = 'hospitalproject.urls'
@@ -117,7 +117,7 @@ DATABASES = {
         "PORT": "5432",
     }
 }
-
+TIME_INPUT_FORMATS = ['%I:%M %p',]
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
 

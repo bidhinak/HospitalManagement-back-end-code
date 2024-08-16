@@ -8,15 +8,10 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def doctor_login(request):
     username = request.POST.get('username')
-    print(username)
     password = request.POST.get('password1')
-    print(password)
     user = authenticate(request, username=username, password=password)
-    print(user)
     if user is not None:
         login(request, user)
-        print("testing")
-        print(request.user)
         if user.is_staff:
             user_type = 'admin'
         elif user.is_doctor:
@@ -47,19 +42,13 @@ def doctor_login(request):
 @csrf_exempt
 def user_login(request):
     username = request.POST.get('username')
-    print(username)
     password = request.POST.get('password1')
-    print(password)
     user = authenticate(request, username=username, password=password)
-    print(user)
     if user is not None:
-        print(user)
         login(request, user)
         if user.is_user:
-            print("ok")
             user_type = 'user'
         else:
-            print("ok")
             user_type = 'unknown'
         data = {
             'status': True,
@@ -76,14 +65,6 @@ def user_login(request):
             'status': False,
             'result': 'Invalid Username or Password'
         }
-    print(data)
-    print(request.user)
     return JsonResponse(data, safe=False)
 
-def get_csrf_token(request):
-    return JsonResponse({'csrfToken': get_token(request)})
 
-@csrf_exempt
-def new(request):
-    print(request.user)
-    return render(request,'new.html')

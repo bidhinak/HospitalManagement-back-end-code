@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.forms import TimeInput
 
 
 # Create your models here.
@@ -9,7 +10,7 @@ class Login(AbstractUser):
     email = models.EmailField()
     mobile = models.CharField(max_length=10)
     department = models.CharField(max_length=100)
-    photo = models.ImageField(upload_to="doctors/", null=True)
+    photo = models.ImageField(upload_to="doctors/", default="doctors/default admin.png")
     qualification = models.CharField(max_length=100)
 
 
@@ -24,10 +25,20 @@ class doctoradd(models.Model):
     name = models.CharField(max_length=200)
     department = models.CharField(max_length=200)
     photo = models.CharField(max_length=100)
+    mobile = models.CharField(max_length=10)
+    qualification = models.CharField(max_length=100)
 
 
 class schedule(models.Model):
-    user = models.CharField(max_length=200)
+    user = models.ForeignKey(Login, on_delete=models.CASCADE)
+    doctor_name = models.CharField(max_length=200)
     date = models.DateField()
     time = models.TimeField()
     fee = models.CharField(max_length=100)
+
+
+class book(models.Model):
+    user = models.ForeignKey(Login, on_delete=models.CASCADE)
+    schedule = models.ForeignKey(schedule, on_delete=models.CASCADE)
+    status = models.IntegerField(default=0)
+

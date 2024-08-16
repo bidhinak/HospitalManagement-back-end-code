@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from hospitalapp.forms import doctorsignup
-from hospitalapp.models import Notification, Login, doctoradd, schedule
+from hospitalapp.models import Notification, Login, doctoradd, schedule, book
 
 
 class Notificationserializer(serializers.ModelSerializer):
@@ -16,6 +16,12 @@ class doctorsignupserializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class usersignupserializer(serializers.ModelSerializer):
+    class Meta:
+        model = Login
+        fields = "__all__"
+
+
 class doctoraddserializer(serializers.ModelSerializer):
     class Meta:
         model = doctoradd
@@ -25,4 +31,10 @@ class doctoraddserializer(serializers.ModelSerializer):
 class scheduleserializer(serializers.ModelSerializer):
     class Meta:
         model = schedule
+        fields = "__all__"
+
+
+class bookserializer(serializers.ModelSerializer):
+    class Meta:
+        model = book
         fields = "__all__"

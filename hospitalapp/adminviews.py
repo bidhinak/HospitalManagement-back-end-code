@@ -11,7 +11,6 @@ from hospitalapp.serializer import Notificationserializer, doctorsignupserialize
 @api_view(['GET', 'POST'])
 def Notificationdetails(request):
     if request.method == 'GET':
-
         view = Notification.objects.all()
         serializer = Notificationserializer(view, many=True)
         return Response(serializer.data)
@@ -21,6 +20,18 @@ def Notificationdetails(request):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def Notificationdelete(request, pk):
+    try:
+        view = Notification.objects.get(pk=pk)
+        print(view)
+        if request.method == "DELETE":
+            view.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET', 'POST'])
@@ -59,16 +70,23 @@ def doctordetailsget(request, pk):
     if request.method == 'GET':
         serializer = doctorsignupserializer(view)
         return Response(serializer.data)
-    elif request.method == 'DELETE':
-        view.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def doctordetailsdelete(request, pk):
+    try:
+        view = Login.objects.get(pk=pk)
+        if request.method == 'DELETE':
+            view.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET', 'POST'])
 def admindoctoradd(request):
     if request.method == 'GET':
-        view=doctoradd.objects.all()
-
+        view = doctoradd.objects.all()
         serializer = doctoraddserializer(view, many=True)
         return Response(serializer.data)
     if request.method == 'POST':
