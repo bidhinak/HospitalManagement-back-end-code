@@ -1,4 +1,6 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth.password_validation import validate_password
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -9,7 +11,8 @@ from rest_framework.response import Response
 
 from hospitalapp.forms import usersignup
 from hospitalapp.models import Login, doctoradd, schedule, book
-from hospitalapp.serializer import doctoraddserializer, doctorsignupserializer, scheduleserializer, bookserializer
+from hospitalapp.serializer import doctoraddserializer, doctorsignupserializer, scheduleserializer, bookserializer, \
+    usersignupserializer
 
 
 @csrf_exempt
@@ -58,6 +61,7 @@ def userdoctorprofileget(request, pk):
 @api_view(['GET', 'PUT', 'DELETE', 'POST'])
 def userbook(request, pk):
     try:
+        print(pk)
         view = schedule.objects.get(pk=pk)
         print(view)
         v = book.objects.filter(schedule=view)
@@ -118,6 +122,7 @@ def useraccountdelete(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
+
 @api_view(['GET', 'PUT', 'DELETE'])
 def userschedulestatus(request, pk):
     try:
@@ -137,3 +142,51 @@ def userscheduleview(request, pk):
             return Response(serializer.data, status=status.HTTP_200_OK)
     except:
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['POST'])
+def userChangePassword(request, pk):
+    try:
+        user = Login.objects.get(pk=pk)
+    except Login.DoesNotExist:
+        return Response({"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+    data = request.data
+
+    old_password = data.get("old_password")
+    if not check_password(old_password, user.password):
+        return Response({"old_password": "Wrong password."}, status=status.HTTP_400_BAD_REQUEST)
+
+    new_password = data.get("new_password")
+    confirm_password = data.get("confirm_password")
+    if new_password != confirm_password:
+        return Response({"new_password": "New passwords do not match."}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        validate_password(new_password, user)
+    except Exception as e:
+        return Response({"new_password": list(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    user.set_password(new_password)
+    user.save()
+
+    return Response({"detail": "Password changed successfully."}, status=status.HTTP_200_OK)
+
+@api_view(['GET', 'PUT', 'DELETE', 'POST'])
+def userprofileupdate(request, pk):
+    try:
+        view = Login.objects.get(pk=pk)
+        print(view)
+        if request.method == 'GET':
+            serializer = usersignupserializer(view)
+            return Response(serializer.data)
+
+        elif request.method == 'PUT':
+            serializer = usersignupserializer(view, data=request.data,partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+

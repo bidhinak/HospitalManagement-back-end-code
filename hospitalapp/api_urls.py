@@ -12,6 +12,12 @@ urlpatterns = [
     # notification
     path("Notificationdetails", adminviews.Notificationdetails, name="Notificationdetails"),
     path("Notificationdelete/<int:pk>/", adminviews.Notificationdelete, name="Notificationdelete"),
+    # view users
+    path("userdetails",adminviews.userdetails,name="userdetails"),
+    path("userdetailsdelete/<int:pk>/",adminviews.userdetailsdelete,name="userdetailsdelete"),
+    # view user bookings
+    path("userbookingsget/<int:pk>/",adminviews.userbookingsget,name="userbookingsget"),
+    path("userbookingview/<int:pk>/",adminviews.userbookingview,name="userbookingview"),
     # view doctors
     path("doctordetails", adminviews.doctordetails, name="doctordetails"),
     path("doctordetailsget/<int:pk>/", adminviews.doctordetailsget, name="doctordetailsget"),
@@ -39,5 +45,12 @@ urlpatterns = [
     path("userscheduleview/<int:pk>/", userviews.userscheduleview, name="userscheduleview"),
     # doctor profile update
     path("docprofileupdate/<int:pk>/",doctorviews.docprofileupdate,name="docprofileupdate"),
-    path("docChangePassword/<int:pk>/",doctorviews.docChangePassword,name="docChangePassword")
+    path("docprofileupdate2/<int:pk>/",doctorviews.docprofileupdate2,name="docprofileupdate2"),
+    path("docChangePassword/<int:pk>/",doctorviews.docChangePassword,name="docChangePassword"),
+    path("docprofilephotoupdate/<int:pk>/",doctorviews.docprofilephotoupdate,name="docprofilephotoupdate"),
+    path("docprofilephotoupdate2/<int:pk>/", doctorviews.docprofilephotoupdate2, name="docprofilephotoupdate2"),
+    # user profile update
+    path("userChangePassword/<int:pk>/",userviews.userChangePassword,name="userChangePassword"),
+    path("userprofileupdate/<int:pk>/",userviews.userprofileupdate,name="userprofileupdate"),
+
 ]
