@@ -11,7 +11,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from hospitalapp.forms import doctorsignup
-from hospitalapp.models import Login, schedule, book, doctoradd
+from hospitalapp.models import Login, schedule, book, doctoradd, Notification
 from hospitalapp.serializer import scheduleserializer, bookserializer, usersignupserializer, doctorsignupserializer, \
     doctoraddserializer
 
@@ -110,7 +110,6 @@ def doctorscheduleview(request, pk):
 def docaccountdelete(request, pk):
     try:
         show = Login.objects.get(pk=pk)
-        print(show)
         if request.method == "DELETE":
             show.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
@@ -122,19 +121,19 @@ def docaccountdelete(request, pk):
 def docprofileupdate(request, pk):
     try:
         view = Login.objects.get(pk=pk)
-        print(view)
         if request.method == 'GET':
             serializer = doctorsignupserializer(view)
             return Response(serializer.data)
 
         elif request.method == 'PUT':
-            serializer = doctorsignupserializer(view, data=request.data,partial=True)
+            serializer = doctorsignupserializer(view, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(['GET', 'PUT', 'DELETE', 'POST'])
 def docprofileupdate2(request, pk):
@@ -145,13 +144,14 @@ def docprofileupdate2(request, pk):
             return Response(serializer.data)
 
         elif request.method == 'PUT':
-            serializer = doctoraddserializer(view, data=request.data,partial=True)
+            serializer = doctoraddserializer(view, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(['GET', 'PUT', 'DELETE', 'POST'])
 def docprofilephotoupdate(request, pk):
@@ -162,13 +162,14 @@ def docprofilephotoupdate(request, pk):
             return Response(serializer.data)
 
         elif request.method == 'PUT':
-            serializer = doctorsignupserializer(view, data=request.data,partial=True)
+            serializer = doctorsignupserializer(view, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(['GET', 'PUT', 'DELETE', 'POST'])
 def docprofilephotoupdate2(request, pk):
@@ -179,13 +180,14 @@ def docprofilephotoupdate2(request, pk):
             return Response(serializer.data)
 
         elif request.method == 'PUT':
-            serializer = doctoraddserializer(view, data=request.data,partial=True)
+            serializer = doctoraddserializer(view, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
+
 
 @api_view(['POST'])
 def docChangePassword(request, pk):

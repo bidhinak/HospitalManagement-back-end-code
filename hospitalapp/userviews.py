@@ -61,19 +61,13 @@ def userdoctorprofileget(request, pk):
 @api_view(['GET', 'PUT', 'DELETE', 'POST'])
 def userbook(request, pk):
     try:
-        print(pk)
         view = schedule.objects.get(pk=pk)
-        print(view)
         v = book.objects.filter(schedule=view)
-        print(v)
         if v.exists():
-            print("exist")
             return Response(status=status.HTTP_208_ALREADY_REPORTED)
         else:
             if request.method == 'POST':
-                print("post")
                 serializer = bookserializer(data=request.data)
-                print("hi")
                 if serializer.is_valid():
                     serializer.save()
                     return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -90,8 +84,6 @@ def userbook(request, pk):
 def userscheduleget(request, pk):
     try:
         view = book.objects.get(user=pk)
-        print(view)
-
         if request.method == 'GET':
             serializer = scheduleserializer(view, many=True)
             return Response(serializer.data)
@@ -176,7 +168,6 @@ def userChangePassword(request, pk):
 def userprofileupdate(request, pk):
     try:
         view = Login.objects.get(pk=pk)
-        print(view)
         if request.method == 'GET':
             serializer = usersignupserializer(view)
             return Response(serializer.data)

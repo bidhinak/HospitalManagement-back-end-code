@@ -27,7 +27,6 @@ def Notificationdetails(request):
 def Notificationdelete(request, pk):
     try:
         view = Notification.objects.get(pk=pk)
-        print(view)
         if request.method == "DELETE":
             view.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
@@ -67,12 +66,8 @@ def userdetails(request):
 def doctordetailsget(request, pk):
     try:
         view = Login.objects.get(pk=pk)
-        print(view)
-
         v = doctoradd.objects.filter(details=view)
-        print(v)
         if v.exists():
-            print("exist")
             return Response(status=status.HTTP_208_ALREADY_REPORTED)
     except:
         if request.method == 'POST':
@@ -139,7 +134,6 @@ def admindoctoradd(request):
         return Response(serializer.data)
     if request.method == 'POST':
         serializer = doctoraddserializer(data=request.data)
-        print(serializer)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
