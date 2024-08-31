@@ -11,9 +11,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from hospitalapp.forms import doctorsignup
-from hospitalapp.models import Login, schedule, book, doctoradd, Notification
+from hospitalapp.models import Login, schedule, book, doctoradd, Notification, statusreport
 from hospitalapp.serializer import scheduleserializer, bookserializer, usersignupserializer, doctorsignupserializer, \
-    doctoraddserializer
+    doctoraddserializer, reportserializer
 
 
 @csrf_exempt
@@ -216,3 +216,34 @@ def docChangePassword(request, pk):
     user.save()
 
     return Response({"detail": "Password changed successfully."}, status=status.HTTP_200_OK)
+
+
+@api_view(['GET', 'POST'])
+def docreportadd(request, pk):
+    try:
+        v = statusreport.objects.filter(schedule_id=pk)
+        if v.exists():
+            return Response(status=status.HTTP_208_ALREADY_REPORTED)
+        else:
+            if request.method == 'POST':
+                serializer = reportserializer(data=request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    except:
+        if request.method == 'GET':
+            view = statusreport.objects.all()
+            serializer = reportserializer(view, many=True)
+            return Response(serializer.data)
+
+
+@api_view(['GET'])
+def docreportget(request, pk):
+    try:
+        view = statusreport.objects.filter(doc_id=pk)
+        if request.method == 'GET':
+            serializer = reportserializer(view, many=True)
+            return Response(serializer.data)
+    except:
+        return Response(status=status.HTTP_404_NOT_FOUND)

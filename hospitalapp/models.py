@@ -42,3 +42,10 @@ class book(models.Model):
     schedule = models.ForeignKey(schedule, on_delete=models.CASCADE)
     status = models.IntegerField(default=0)
 
+
+class statusreport(models.Model):
+    schedule_id = models.ForeignKey(schedule, on_delete=models.CASCADE)
+    doc_id = models.ForeignKey(Login, on_delete=models.CASCADE)
+    date = models.CharField(max_length=100)
+    time = models.CharField(max_length=100)
+    fee = models.CharField(max_length=100)

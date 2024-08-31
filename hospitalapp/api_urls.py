@@ -33,6 +33,7 @@ urlpatterns = [
     # userbooking
     path("userbook/<int:pk>/", userviews.userbook, name="userbook"),
     path("userscheduleget/<int:pk>/", userviews.userscheduleget, name="userscheduleget"),
+    path("userbookget",userviews.userbookget,name="userbookget"),
     path("doctorschedulestatus/<int:pk>/", doctorviews.doctorschedulestatus, name="doctorschedulestatus"),
     path("doctorscheduleview/<int:pk>/", doctorviews.doctorscheduleview, name="doctorscheduleview"),
     # search
@@ -52,5 +53,7 @@ urlpatterns = [
     # user profile update
     path("userChangePassword/<int:pk>/",userviews.userChangePassword,name="userChangePassword"),
     path("userprofileupdate/<int:pk>/",userviews.userprofileupdate,name="userprofileupdate"),
-
+    # docreport
+    path("docreportadd/<int:pk>/",doctorviews.docreportadd,name="docreportadd"),
+    path("docreportget/<int:pk>/",doctorviews.docreportget,name="docreportget"),
 ]

@@ -30,7 +30,6 @@ def user_signup(request):
         if result_data:
             data = {'result': True}
         else:
-            print(list(form.errors))
             error_data = form.errors
             error_dict = {}
             for i in list(form.errors):
@@ -80,6 +79,14 @@ def userbook(request, pk):
             return Response(serializer.data)
 
 
+@api_view(['GET', ])
+def userbookget(request):
+    if request.method == 'GET':
+        view = book.objects.all()
+        serializer = bookserializer(view, many=True)
+        return Response(serializer.data)
+
+
 @api_view(['GET', 'PUT', 'DELETE', 'POST'])
 def userscheduleget(request, pk):
     try:
@@ -114,7 +121,6 @@ def useraccountdelete(request, pk):
         return Response(status=status.HTTP_404_NOT_FOUND)
 
 
-
 @api_view(['GET', 'PUT', 'DELETE'])
 def userschedulestatus(request, pk):
     try:
@@ -124,6 +130,7 @@ def userschedulestatus(request, pk):
             return Response(serializer.data)
     except:
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 @api_view(['GET'])
 def userscheduleview(request, pk):
@@ -164,6 +171,7 @@ def userChangePassword(request, pk):
 
     return Response({"detail": "Password changed successfully."}, status=status.HTTP_200_OK)
 
+
 @api_view(['GET', 'PUT', 'DELETE', 'POST'])
 def userprofileupdate(request, pk):
     try:
@@ -173,11 +181,10 @@ def userprofileupdate(request, pk):
             return Response(serializer.data)
 
         elif request.method == 'PUT':
-            serializer = usersignupserializer(view, data=request.data,partial=True)
+            serializer = usersignupserializer(view, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     except:
         return Response(status=status.HTTP_404_NOT_FOUND)
-
